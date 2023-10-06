@@ -9,6 +9,7 @@
 import UIKit
 import SafariServices
 import MenuItemKit
+import WebKit
 
 /// Protocol which is used from `FolioReaderPage`s.
 @objc public protocol FolioReaderPageDelegate: class {
@@ -35,7 +36,7 @@ import MenuItemKit
     @objc optional func pageTap(_ recognizer: UITapGestureRecognizer)
 }
 
-open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRecognizerDelegate {
+open class FolioReaderPage: UICollectionViewCell, WKWebViewDelegate, UIGestureRecognizerDelegate {
     weak var delegate: FolioReaderPageDelegate?
     weak var readerContainer: FolioReaderContainer?
 
@@ -187,9 +188,9 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         return tempHtmlContent as String
     }
 
-    // MARK: - UIWebView Delegate
+    // MARK: - WKWebView Delegate
 
-    open func webViewDidFinishLoad(_ webView: UIWebView) {
+    open func webViewDidFinishLoad(_ webView: WKWebView) {
         guard let webView = webView as? FolioReaderWebView else {
             return
         }
@@ -225,7 +226,7 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
         delegate?.pageDidLoad?(self)
     }
 
-    open func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
+    open func webView(_ webView: WKWebView, shouldStartLoadWith request: URLRequest, navigationType: WKWebView.NavigationType) -> Bool {
         guard
             let webView = webView as? FolioReaderWebView,
             let scheme = request.url?.scheme else {
